@@ -1,25 +1,30 @@
 FROM php:8.2-cli
 
-# Install extension yang dibutuhkan
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     libzip-dev \
     libpng-dev \
+    libonig-dev \
     zip \
     unzip \
     git \
+    curl \
     && docker-php-ext-install zip gd mbstring
 
-# Install composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+# Install Composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # Set working directory
-WORKDIR /app
+WORKDIR /var/www
 
 # Copy project
 COPY . .
 
-# Install dependency
-RUN composer install
+# Install PHP dependencies
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 
-# Run app
+# Expose port
+EXPOSE 8080
+
+# Run server
 CMD php -S 0.0.0.0:$PORT -t public
