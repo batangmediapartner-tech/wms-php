@@ -1,8 +1,10 @@
 [phases.setup]
-nixPkgs = ["php", "phpExtensions.gd", "phpExtensions.zip"]
+nixPkgs = ["php", "phpExtensions.gd", "phpExtensions.zip", "phpExtensions.mbstring"]
 
-[phases.build]
-cmds = ["composer install"]
+[phases.install]
+cmds = [
+  "composer install --ignore-platform-req=ext-gd --ignore-platform-req=ext-zip"
+]
 
 [start]
 cmd = "php -S 0.0.0.0:$PORT -t public"
