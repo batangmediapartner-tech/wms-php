@@ -1,6 +1,5 @@
 <?php
 session_start();
-
 define('BASE_PATH', realpath(__DIR__ . '/../'));
 
    
